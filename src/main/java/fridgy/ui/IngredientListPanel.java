@@ -26,7 +26,8 @@ public class IngredientListPanel extends UiPart<Region> implements Observer {
     /**
      * Creates a {@code IngredientListPanel} with the given {@code ObservableList}.
      */
-    public IngredientListPanel(Observable activeObservable, ObservableList<Ingredient> ingredientList, ActiveItemPanel activeItemPanel) {
+    public IngredientListPanel(Observable activeObservable, ObservableList<Ingredient> ingredientList,
+                               ActiveItemPanel activeItemPanel) {
         super(FXML);
         activeObservable.setObserver(this);
         ingredientListView.setItems(ingredientList);
@@ -34,8 +35,8 @@ public class IngredientListPanel extends UiPart<Region> implements Observer {
         ingredientListView.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Ingredient>() {
                     public void changed(ObservableValue<? extends Ingredient> ov,
-                                        Ingredient old_val, Ingredient new_val) {
-                        activeItemPanel.update(new_val);
+                                        Ingredient oldVal, Ingredient newVal) {
+                        activeItemPanel.update(newVal);
                     }
                 });
     }
@@ -45,10 +46,10 @@ public class IngredientListPanel extends UiPart<Region> implements Observer {
         ingredientListView.getSelectionModel().select(newItem);
     }
 
-    @Override
     /**
      * This should not be called
      */
+    @Override
     public void update(Recipe newItem) {
         return;
     }

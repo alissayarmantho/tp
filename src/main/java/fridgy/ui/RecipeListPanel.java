@@ -31,8 +31,8 @@ public class RecipeListPanel extends UiPart<Region> implements Observer {
      * Creates a {@code RecipeListPanel} with the given {@code ObservableList}.
      * isDetailed flag determines if the recipe card will show the steps. This is added to allow component reuse.
      */
-    public RecipeListPanel(Observable activeObservable, ObservableList<Recipe> recipeList, ActiveItemPanel activeItemPanel,
-                           Function<BaseIngredient, Boolean> isEnough) {
+    public RecipeListPanel(Observable activeObservable, ObservableList<Recipe> recipeList,
+                           ActiveItemPanel activeItemPanel, Function<BaseIngredient, Boolean> isEnough) {
         super(FXML);
         activeObservable.setObserver(this);
         this.isEnough = isEnough;
@@ -41,16 +41,16 @@ public class RecipeListPanel extends UiPart<Region> implements Observer {
         recipeListView.getSelectionModel().selectedItemProperty().addListener(
                 new ChangeListener<Recipe>() {
                     public void changed(ObservableValue<? extends Recipe> ov,
-                                        Recipe old_val, Recipe new_val) {
-                        activeItemPanel.update(new_val);
+                                        Recipe oldVal, Recipe newVal) {
+                        activeItemPanel.update(newVal);
                     }
                 });
     }
 
-    @Override
     /**
      * This should not be called
      */
+    @Override
     public void update(Ingredient newItem) {
         return;
     }
