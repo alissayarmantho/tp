@@ -19,8 +19,12 @@ import fridgy.model.ModelManager;
 import fridgy.model.RecipeBook;
 import fridgy.model.RecipeModel;
 import fridgy.model.UserPrefs;
+import fridgy.model.ingredient.Ingredient;
 import fridgy.model.ingredient.Quantity;
+import fridgy.model.recipe.Recipe;
 import fridgy.testutil.IngredientBuilder;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 public class CookRecipeCommandTest {
 
@@ -139,6 +143,7 @@ public class CookRecipeCommandTest {
         modelManager.add(CHICKEN);
         modelManager.add(FLOUR);
         modelManager.add(RICE);
+        modelManager.getActiveTabObservable().setObserver(new ObserverStub());
         CookRecipeCommand cookRecipeCommand = new CookRecipeCommand((Index.fromOneBased(1)));
         try {
             assertEquals(String.format(CookRecipeCommand.MESSAGE_SUCCESS, RICE),
@@ -151,5 +156,21 @@ public class CookRecipeCommandTest {
         // Chicken and Flour should remain unused
         assertEquals(CHICKEN.getQuantity(), modelManager.getInventory().getList().get(0).getQuantity());
         assertEquals(FLOUR.getQuantity(), modelManager.getInventory().getList().get(1).getQuantity());
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
     }
 }

@@ -126,6 +126,7 @@ public class FridgyParserTest {
                 .build();
         ObserverStub observerStub = new ObserverStub();
         testModel.getActiveObservable().setObserver(observerStub);
+        testModel.getActiveTabObservable().setObserver(observerStub);
         testModel.setActiveRecipe(testRecipe);
         try {
             CommandResult expectedAdd = new AddRecipeCommand(testRecipe).execute(testModel);
@@ -151,6 +152,8 @@ public class FridgyParserTest {
     @Test
     public void parseCommand_validTripleTokenIngredientCommand_returnsCorrectCommandResult() {
         Model testModel = new ModelManager();
+        testModel.getActiveTabObservable().setObserver(new ObserverStub());
+
         Ingredient testIngredient = new Ingredient(new Name("ingr1"), new Quantity("20g"),
                 Set.of(new Tag("tag")), new ExpiryDate("20-10-2021"));
 

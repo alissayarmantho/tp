@@ -14,10 +14,13 @@ import fridgy.model.RecipeBook;
 import fridgy.model.UserPrefs;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.model.ingredient.IngredientDefaultComparator;
+import fridgy.model.recipe.Recipe;
 import fridgy.testutil.EditIngredientDescriptorBuilder;
 import fridgy.testutil.IngredientBuilder;
 import fridgy.testutil.TypicalIndexes;
 import fridgy.testutil.TypicalIngredients;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for EditCommand.
@@ -32,10 +35,13 @@ public class EditCommandTest {
         EditCommand.EditIngredientDescriptor descriptor = new EditIngredientDescriptorBuilder(editedIngredient).build();
         EditCommand editCommand = new EditCommand(TypicalIndexes.INDEX_FIRST_INGREDIENT, descriptor);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_INGREDIENT_SUCCESS, editedIngredient);
 
         Model expectedModel = new ModelManager(new Inventory(model.getInventory()), new RecipeBook(), new UserPrefs());
         expectedModel.set(model.getFilteredIngredientList().get(0), editedIngredient);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
 
         CommandTestUtil.assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -57,11 +63,14 @@ public class EditCommandTest {
                 .withTags(CommandTestUtil.VALID_TAG_VEGETABLE).build();
         EditCommand editCommand = new EditCommand(indexLastIngredient, descriptor);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_INGREDIENT_SUCCESS, editedIngredient);
 
         Model expectedModel = new ModelManager(new Inventory(model.getInventory()), new RecipeBook(), new UserPrefs());
         expectedModel.set(lastIngredient, editedIngredient);
         expectedModel.sortIngredient(new IngredientDefaultComparator());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         CommandTestUtil.assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
 
@@ -73,9 +82,12 @@ public class EditCommandTest {
                 .getFilteredIngredientList()
                 .get(TypicalIndexes.INDEX_FIRST_INGREDIENT.getZeroBased());
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_INGREDIENT_SUCCESS, editedIngredient);
 
         Model expectedModel = new ModelManager(new Inventory(model.getInventory()), new RecipeBook(), new UserPrefs());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
 
         CommandTestUtil.assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
     }
@@ -91,10 +103,13 @@ public class EditCommandTest {
         EditCommand editCommand = new EditCommand(TypicalIndexes.INDEX_FIRST_INGREDIENT,
                 new EditIngredientDescriptorBuilder().withName(CommandTestUtil.VALID_NAME_BASIL).build());
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
         String expectedMessage = String.format(EditCommand.MESSAGE_EDIT_INGREDIENT_SUCCESS, editedIngredient);
 
         Model expectedModel = new ModelManager(new Inventory(model.getInventory()), new RecipeBook(), new UserPrefs());
         expectedModel.set(model.getFilteredIngredientList().get(0), editedIngredient);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         expectedModel.sortIngredient(new IngredientDefaultComparator());
 
         CommandTestUtil.assertCommandSuccess(editCommand, model, expectedMessage, expectedModel);
@@ -178,6 +193,22 @@ public class EditCommandTest {
         // different descriptor -> returns false
         assertFalse(standardCommand.equals(new EditCommand(TypicalIndexes.INDEX_FIRST_INGREDIENT,
                 CommandTestUtil.DESC_BASIL)));
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
     }
 
 }

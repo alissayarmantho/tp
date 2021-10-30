@@ -23,6 +23,7 @@ import fridgy.model.base.ReadOnlyDatabase;
 import fridgy.model.ingredient.BaseIngredient;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
 
 public class DeleteRecipeCommandTest {
@@ -83,6 +84,7 @@ public class DeleteRecipeCommandTest {
         try {
             CommandResult result = testCommand.execute(testModel);
             assertTrue(result.equals(expected));
+            assertTrue(testModel.getActiveTab().equals(TabEnum.RECIPE));
             assertFalse(testModel.has(BURGER));
             assertTrue(testModel.has(MAGGIE));
         } catch (CommandException e) {
@@ -91,6 +93,8 @@ public class DeleteRecipeCommandTest {
     }
 
     private class RecipeModelStub implements RecipeModel {
+
+        private TabEnum activeTab;
 
         @Override
         public Path getRecipeBookFilePath() {
@@ -153,6 +157,11 @@ public class DeleteRecipeCommandTest {
         }
 
         @Override
+        public void setActiveTab(TabEnum activeTab) {
+            this.activeTab = activeTab;
+        }
+
+        @Override
         public void updateFilteredRecipeList(Predicate<Recipe> predicate) {
             throw new AssertionError("Should not be used!");
         }
@@ -160,6 +169,10 @@ public class DeleteRecipeCommandTest {
         @Override
         public boolean deductIngredients(Set<BaseIngredient> ingrToDeduct) {
             throw new AssertionError("Should not be used!");
+        }
+
+        public TabEnum getActiveTab() {
+            return activeTab;
         }
     }
 

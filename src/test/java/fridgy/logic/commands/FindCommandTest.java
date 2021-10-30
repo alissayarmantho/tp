@@ -14,8 +14,12 @@ import fridgy.model.Model;
 import fridgy.model.ModelManager;
 import fridgy.model.RecipeBook;
 import fridgy.model.UserPrefs;
+import fridgy.model.ingredient.Ingredient;
 import fridgy.model.ingredient.NameContainsKeywordsPredicate;
+import fridgy.model.recipe.Recipe;
 import fridgy.testutil.TypicalIngredients;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 /**
  * Contains integration tests (interaction with the Model) for {@code FindCommand}.
@@ -57,7 +61,10 @@ public class FindCommandTest {
         String expectedMessage = String.format(Messages.MESSAGE_INGREDIENTS_LISTED_OVERVIEW, 0, "");
         NameContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindCommand command = new FindCommand(predicate);
+        model.getActiveTabObservable().setObserver(new ObserverStub());
         expectedModel.updateFilteredIngredientList(predicate);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         CommandTestUtil.assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Collections.emptyList(), model.getFilteredIngredientList());
     }
@@ -67,7 +74,10 @@ public class FindCommandTest {
         String expectedMessage = String.format(Messages.MESSAGE_INGREDIENTS_LISTED_OVERVIEW, 1, "");
         NameContainsKeywordsPredicate predicate = preparePredicate("Carrot Strawberry Dragon Fruit");
         FindCommand command = new FindCommand(predicate);
+        model.getActiveTabObservable().setObserver(new ObserverStub());
         expectedModel.updateFilteredIngredientList(predicate);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         CommandTestUtil.assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(TypicalIngredients.CARROT), model.getFilteredIngredientList());
     }
@@ -77,7 +87,10 @@ public class FindCommandTest {
         String expectedMessage = String.format(Messages.MESSAGE_INGREDIENTS_LISTED_OVERVIEW, 3, "s");
         NameContainsKeywordsPredicate predicate = preparePredicate("Carrot Slices Egg mayo Fig jam");
         FindCommand command = new FindCommand(predicate);
+        model.getActiveTabObservable().setObserver(new ObserverStub());
         expectedModel.updateFilteredIngredientList(predicate);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         CommandTestUtil.assertCommandSuccess(command, model, expectedMessage, expectedModel);
         assertEquals(Arrays.asList(TypicalIngredients.CARROT, TypicalIngredients.EGG, TypicalIngredients.FIGS),
                 model.getFilteredIngredientList());
@@ -88,5 +101,21 @@ public class FindCommandTest {
      */
     private NameContainsKeywordsPredicate preparePredicate(String userInput) {
         return new NameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
     }
 }

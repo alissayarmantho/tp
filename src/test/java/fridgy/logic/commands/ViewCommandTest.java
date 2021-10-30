@@ -21,6 +21,7 @@ import fridgy.model.Inventory;
 import fridgy.model.ReadOnlyUserPrefs;
 import fridgy.model.base.ReadOnlyDatabase;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
 
 public class ViewCommandTest {
@@ -73,7 +74,7 @@ public class ViewCommandTest {
     }
 
     @Test
-    public void execute_validTargetIndex_changesSpecifiedActiveRecipe() {
+    public void execute_validTargetIndex_changesSpecifiedActiveIngredient() {
         ViewCommand testCommand = new ViewCommand(Index.fromZeroBased(0));
         ViewCommandTest.IngredientModelStubWithIngredient testModel =
                 new IngredientModelStubWithIngredient();
@@ -84,6 +85,7 @@ public class ViewCommandTest {
             CommandResult result = testCommand.execute(testModel);
             assertTrue(result.equals(expected));
             assertTrue(testModel.getActive().equals(APPLE));
+            assertTrue(testModel.getActiveTab().equals(TabEnum.INGREDIENT));
             assertFalse(testModel.getActive().equals(BANANA));
         } catch (CommandException e) {
             Assertions.fail("CommandException thrown!");
@@ -170,6 +172,11 @@ public class ViewCommandTest {
         }
 
         @Override
+        public void setActiveTab(TabEnum tabEnum) {
+            throw new AssertionError("Should not be used!");
+        }
+
+        @Override
         public void updateFilteredIngredientList(Predicate<Ingredient> predicate) {
             throw new AssertionError("Should not be used!");
         }
@@ -178,6 +185,7 @@ public class ViewCommandTest {
     private class IngredientModelStubNoIngredient extends IngredientModelStub {
         private Inventory inventory = new Inventory();
         private Ingredient active;
+        private TabEnum activeTab;
 
         @Override
         public ObservableList<Ingredient> getFilteredIngredientList() {
@@ -209,8 +217,17 @@ public class ViewCommandTest {
             this.active = ingredient;
         }
 
+        @Override
+        public void setActiveTab(TabEnum activeTab) {
+            this.activeTab = activeTab;
+        }
+
         public Ingredient getActive() {
             return this.active;
+        }
+
+        public TabEnum getActiveTab() {
+            return this.activeTab;
         }
     }
 

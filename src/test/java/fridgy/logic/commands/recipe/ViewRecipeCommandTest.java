@@ -23,6 +23,7 @@ import fridgy.model.base.ReadOnlyDatabase;
 import fridgy.model.ingredient.BaseIngredient;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
 
 public class ViewRecipeCommandTest {
@@ -153,6 +154,11 @@ public class ViewRecipeCommandTest {
         }
 
         @Override
+        public void setActiveTab(TabEnum tabEnum) {
+            throw new AssertionError("Should not be used!");
+        }
+
+        @Override
         public void updateFilteredRecipeList(Predicate<Recipe> predicate) {
             throw new AssertionError("Should not be used!");
         }
@@ -166,6 +172,7 @@ public class ViewRecipeCommandTest {
     private class RecipeModelStubNoRecipe extends RecipeModelStub {
         private RecipeBook recipeBook = new RecipeBook();
         private Recipe active;
+        private TabEnum activeTab;
 
         @Override
         public ObservableList<Recipe> getFilteredRecipeList() {
@@ -197,8 +204,17 @@ public class ViewRecipeCommandTest {
             this.active = recipe;
         }
 
+        @Override
+        public void setActiveTab(TabEnum tabEnum) {
+            this.activeTab = activeTab;
+        }
+
         public Recipe getActive() {
             return this.active;
+        }
+
+        public TabEnum getActiveTab() {
+            return this.activeTab;
         }
     }
 

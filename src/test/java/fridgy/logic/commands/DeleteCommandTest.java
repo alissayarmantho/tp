@@ -12,8 +12,11 @@ import fridgy.model.ModelManager;
 import fridgy.model.RecipeBook;
 import fridgy.model.UserPrefs;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.model.recipe.Recipe;
 import fridgy.testutil.TypicalIndexes;
 import fridgy.testutil.TypicalIngredients;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -29,9 +32,13 @@ public class DeleteCommandTest {
                 .get(TypicalIndexes.INDEX_FIRST_INGREDIENT.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_INGREDIENT);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_INGREDIENT_SUCCESS, ingredientToDelete);
 
         ModelManager expectedModel = new ModelManager(model.getInventory(), new RecipeBook(), new UserPrefs());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         expectedModel.delete(ingredientToDelete);
 
         CommandTestUtil.assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
@@ -53,10 +60,14 @@ public class DeleteCommandTest {
                 .get(TypicalIndexes.INDEX_FIRST_INGREDIENT.getZeroBased());
         DeleteCommand deleteCommand = new DeleteCommand(TypicalIndexes.INDEX_FIRST_INGREDIENT);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         String expectedMessage = String.format(DeleteCommand.MESSAGE_DELETE_INGREDIENT_SUCCESS, ingredientToDelete);
 
         Model expectedModel = new ModelManager(model.getInventory(), new RecipeBook(), new UserPrefs());
         expectedModel.delete(ingredientToDelete);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         showNoIngredient(expectedModel);
 
         CommandTestUtil.assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
@@ -104,5 +115,21 @@ public class DeleteCommandTest {
         model.updateFilteredIngredientList(p -> false);
 
         assertTrue(model.getFilteredIngredientList().isEmpty());
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
     }
 }

@@ -17,12 +17,15 @@ import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.Model;
 import fridgy.model.ModelManager;
 import fridgy.model.ingredient.BaseIngredient;
+import fridgy.model.ingredient.Ingredient;
 import fridgy.model.ingredient.Quantity;
 import fridgy.model.recipe.Name;
 import fridgy.model.recipe.Recipe;
 import fridgy.model.recipe.Step;
 import fridgy.testutil.EditRecipeDescriptorBuilder;
 import fridgy.testutil.RecipeBuilder;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 public class EditRecipeCommandTest {
 
@@ -53,6 +56,8 @@ public class EditRecipeCommandTest {
         Index invalidIndexTooSmall = Index.fromZeroBased(0);
         EditRecipeDescriptor testDescriptor = new EditRecipeDescriptor();
         Model testModel = new ModelManager();
+        testModel.getActiveTabObservable().setObserver(new ObserverStub());
+
         EditRecipeCommand testCommand = new EditRecipeCommand(invalidIndexTooBig, testDescriptor);
         EditRecipeCommand testCommand2 = new EditRecipeCommand(invalidIndexTooSmall, testDescriptor);
         assertThrows(CommandException.class, () -> testCommand.execute(testModel));
@@ -62,6 +67,7 @@ public class EditRecipeCommandTest {
     @Test
     public void execute_targetRecipeAlreadyExists_throwsCommandException() {
         Model testModel = new ModelManager();
+        testModel.getActiveTabObservable().setObserver(new ObserverStub());
 
         Recipe testRecipe1 = new RecipeBuilder()
                 .withName("Test Name 1")
@@ -89,6 +95,8 @@ public class EditRecipeCommandTest {
     @Test
     public void execute_validEditRecipeCommand_returnsCorrectResult() {
         Model testModel = new ModelManager();
+        testModel.getActiveTabObservable().setObserver(new ObserverStub());
+
         Recipe testRecipe1 = new RecipeBuilder()
                 .withName("Test Name 1")
                 .withDescription("Test Description")
@@ -114,6 +122,9 @@ public class EditRecipeCommandTest {
         EditRecipeCommand testCommand = new EditRecipeCommand(Index.fromOneBased(1), testDescriptor);
 
         Model expectedModel = new ModelManager();
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
+
         Recipe targetRecipe = new RecipeBuilder()
                 .withName("Test Name 3")
                 .withDescription("Test Description")
@@ -164,5 +175,21 @@ public class EditRecipeCommandTest {
         EditRecipeCommand targetCommand = new EditRecipeCommand(Index.fromOneBased(1), targetDescriptor);
 
         assertEquals(testCommand, targetCommand);
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
     }
 }

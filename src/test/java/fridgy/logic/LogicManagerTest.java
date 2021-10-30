@@ -29,6 +29,8 @@ import fridgy.storage.StorageManager;
 import fridgy.testutil.Assert;
 import fridgy.testutil.IngredientBuilder;
 import fridgy.testutil.TypicalIngredients;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 
 public class LogicManagerTest {
@@ -113,8 +115,11 @@ public class LogicManagerTest {
      */
     private void assertCommandSuccess(String inputCommand, String expectedMessage,
             Model expectedModel) throws CommandException, ParseException {
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         CommandResult result = logic.execute(inputCommand);
         assertEquals(expectedMessage, result.getFeedbackToUser());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
         assertEquals(expectedModel, model);
     }
 
@@ -153,6 +158,9 @@ public class LogicManagerTest {
      */
     private void assertCommandFailure(String inputCommand, Class<? extends Throwable> expectedException,
             String expectedMessage, Model expectedModel) {
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+
         Assert.assertThrows(expectedException, expectedMessage, () -> logic.execute(inputCommand));
         assertEquals(expectedModel, model);
     }
@@ -182,6 +190,22 @@ public class LogicManagerTest {
         @Override
         public void saveRecipeBook(ReadOnlyDatabase<Recipe> recipeBook, Path filePath) throws IOException {
             throw DUMMY_IO_EXCEPTION;
+        }
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
         }
     }
 }

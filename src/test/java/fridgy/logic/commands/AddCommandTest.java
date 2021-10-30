@@ -22,8 +22,8 @@ import fridgy.model.base.ReadOnlyDatabase;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.testutil.Assert;
 import fridgy.testutil.IngredientBuilder;
+import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
-
 
 public class AddCommandTest {
 
@@ -35,11 +35,13 @@ public class AddCommandTest {
     @Test
     public void execute_ingredientAcceptedByModel_addSuccessful() throws Exception {
         ModelStubAcceptingIngredientAdded modelStub = new ModelStubAcceptingIngredientAdded();
+
         Ingredient validIngredient = new IngredientBuilder().build();
         CommandResult commandResult = new AddCommand(validIngredient).execute(modelStub);
 
         assertEquals(String.format(AddCommand.MESSAGE_SUCCESS, validIngredient), commandResult.getFeedbackToUser());
         assertEquals(Arrays.asList(validIngredient), modelStub.ingredientsAdded);
+        assertEquals(TabEnum.INGREDIENT, modelStub.getActiveTab());
     }
 
     @Test
@@ -78,9 +80,11 @@ public class AddCommandTest {
     }
 
     /**
-     * A default model stub that have all of the methods failing.
+     * A default model stub that have all of the methods failing except for setActiveTab
      */
     private class ModelStub implements IngredientModel {
+        private TabEnum activeTab;
+
         @Override
         public void setUserPrefs(ReadOnlyUserPrefs userPrefs) {
             throw new AssertionError("This method should not be called.");
@@ -157,6 +161,15 @@ public class AddCommandTest {
         @Override
         public void setActiveIngredient(Ingredient activeIngredient) {
             throw new AssertionError("This method should not be called.");
+        }
+
+        @Override
+        public void setActiveTab(TabEnum activeTab) {
+            this.activeTab = activeTab;
+        }
+
+        public TabEnum getActiveTab() {
+            return activeTab;
         }
 
     }

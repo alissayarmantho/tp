@@ -15,8 +15,11 @@ import fridgy.model.Inventory;
 import fridgy.model.Model;
 import fridgy.model.ModelManager;
 import fridgy.model.UserPrefs;
+import fridgy.model.ingredient.Ingredient;
 import fridgy.model.recipe.Recipe;
 import fridgy.testutil.TypicalRecipes;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 public class MultiDeleteRecipeCommandTest {
 
@@ -43,9 +46,13 @@ public class MultiDeleteRecipeCommandTest {
         MultiDeleteRecipeCommand multiDeleteRecipeCommand = new MultiDeleteRecipeCommand(INDEX_FIRST_RECIPE,
                 INDEX_SECOND_RECIPE, INDEX_THIRD_RECIPE);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         String expectedMessage = String.format(MultiDeleteRecipeCommand.MESSAGE_MULTIDELETE_RECIPE_SUCCESS, 3);
 
         ModelManager expectedModel = new ModelManager(new Inventory(), model.getRecipeBook(), new UserPrefs());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
         expectedModel.delete(recipeToDelete1);
         expectedModel.delete(recipeToDelete2);
         expectedModel.delete(recipeToDelete3);
@@ -71,10 +78,14 @@ public class MultiDeleteRecipeCommandTest {
                 .get(INDEX_FIRST_RECIPE.getZeroBased());
         MultiDeleteRecipeCommand deleteCommand = new MultiDeleteRecipeCommand(INDEX_FIRST_RECIPE);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         String expectedMessage = String.format(MultiDeleteRecipeCommand.MESSAGE_MULTIDELETE_RECIPE_SUCCESS,
                 1);
 
         Model expectedModel = new ModelManager(new Inventory(), model.getRecipeBook(), new UserPrefs());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
         expectedModel.delete(recipeToDelete);
         showNoRecipe(expectedModel);
 
@@ -100,9 +111,14 @@ public class MultiDeleteRecipeCommandTest {
         /* Trivial test case where nothing is deleted if there are no arguments passed to varargs. Parser should have
           filtered this out. */
         MultiDeleteRecipeCommand multiDeleteRecipeCommand = new MultiDeleteRecipeCommand();
+
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         String expectedMessage = String.format(MultiDeleteRecipeCommand.MESSAGE_MULTIDELETE_RECIPE_SUCCESS, 0);
 
         ModelManager expectedModel = new ModelManager(new Inventory(), model.getRecipeBook(), new UserPrefs());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
 
         RecipeCommandTestUtil.assertRecipeCommandSuccess(multiDeleteRecipeCommand, model,
                 expectedMessage, expectedModel);
@@ -133,4 +149,19 @@ public class MultiDeleteRecipeCommandTest {
         assertFalse(multiDeleteFirstCommand.equals(multiDeleteSecondCommand));
     }
 
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
+    }
 }

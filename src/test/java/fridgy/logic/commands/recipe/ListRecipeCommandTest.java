@@ -14,8 +14,12 @@ import fridgy.model.Inventory;
 import fridgy.model.Model;
 import fridgy.model.ModelManager;
 import fridgy.model.UserPrefs;
+import fridgy.model.ingredient.Ingredient;
+import fridgy.model.recipe.Recipe;
 import fridgy.testutil.TypicalIndexes;
 import fridgy.testutil.TypicalRecipes;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for ListCommand.
@@ -59,7 +63,11 @@ public class ListRecipeCommandTest {
     @Test
     public void execute_listIsNotFiltered_showsSameList() {
         ListRecipeCommand testCommand = new ListRecipeCommand();
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         CommandResult expected = new CommandResult(MESSAGE_SUCCESS);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
 
         assertTrue(testCommand.execute(model).equals(expected));
         assertEquals(expectedModel, model);
@@ -68,10 +76,30 @@ public class ListRecipeCommandTest {
     @Test
     public void execute_listIsFiltered_showsEverything() {
         ListRecipeCommand testCommand = new ListRecipeCommand();
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         CommandResult expected = new CommandResult(MESSAGE_SUCCESS);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
 
         RecipeCommandTestUtil.showRecipeAtIndex(model, TypicalIndexes.INDEX_FIRST_INGREDIENT);
         assertTrue(testCommand.execute(model).equals(expected));
         assertEquals(expectedModel, model);
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
     }
 }

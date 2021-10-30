@@ -15,8 +15,11 @@ import fridgy.model.ModelManager;
 import fridgy.model.RecipeBook;
 import fridgy.model.UserPrefs;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.model.recipe.Recipe;
 import fridgy.testutil.TypicalIndexes;
 import fridgy.testutil.TypicalIngredients;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 public class MultiDeleteCommandTest {
 
@@ -43,12 +46,16 @@ public class MultiDeleteCommandTest {
         MultiDeleteCommand multiDeleteCommand = new MultiDeleteCommand(INDEX_FIRST_INGREDIENT,
                 INDEX_SECOND_INGREDIENT, INDEX_THIRD_INGREDIENT);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         String expectedMessage = String.format(MultiDeleteCommand.MESSAGE_MULTIDELETE_INGREDIENT_SUCCESS, 3);
 
         ModelManager expectedModel = new ModelManager(model.getInventory(), new RecipeBook(), new UserPrefs());
         expectedModel.delete(ingredientToDelete1);
         expectedModel.delete(ingredientToDelete2);
         expectedModel.delete(ingredientToDelete3);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
 
         CommandTestUtil.assertCommandSuccess(multiDeleteCommand, model, expectedMessage, expectedModel);
     }
@@ -71,11 +78,15 @@ public class MultiDeleteCommandTest {
                 .get(INDEX_FIRST_INGREDIENT.getZeroBased());
         MultiDeleteCommand deleteCommand = new MultiDeleteCommand(INDEX_FIRST_INGREDIENT);
 
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         String expectedMessage = String.format(MultiDeleteCommand.MESSAGE_MULTIDELETE_INGREDIENT_SUCCESS,
                 1);
 
         Model expectedModel = new ModelManager(model.getInventory(), new RecipeBook(), new UserPrefs());
         expectedModel.delete(ingredientToDelete);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
         showNoIngredient(expectedModel);
 
         CommandTestUtil.assertCommandSuccess(deleteCommand, model, expectedMessage, expectedModel);
@@ -102,6 +113,10 @@ public class MultiDeleteCommandTest {
         String expectedMessage = String.format(MultiDeleteCommand.MESSAGE_MULTIDELETE_INGREDIENT_SUCCESS, 0);
 
         ModelManager expectedModel = new ModelManager(model.getInventory(), new RecipeBook(), new UserPrefs());
+
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.INGREDIENT);
 
         CommandTestUtil.assertCommandSuccess(multiDeleteCommand, model, expectedMessage, expectedModel);
     }
@@ -131,4 +146,19 @@ public class MultiDeleteCommandTest {
         assertFalse(multiDeleteFirstCommand.equals(multiDeleteSecondCommand));
     }
 
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
+    }
 }

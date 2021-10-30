@@ -20,8 +20,12 @@ import fridgy.model.Model;
 import fridgy.model.ModelManager;
 import fridgy.model.RecipeModel;
 import fridgy.model.UserPrefs;
+import fridgy.model.ingredient.Ingredient;
 import fridgy.model.recipe.NameContainsKeywordsPredicate;
+import fridgy.model.recipe.Recipe;
 import fridgy.testutil.TypicalRecipes;
+import fridgy.ui.Observer;
+import fridgy.ui.TabEnum;
 
 public class FindRecipeCommandTest {
 
@@ -97,6 +101,9 @@ public class FindRecipeCommandTest {
     public void execute_zeroKeywords_noRecipeFound() {
         NameContainsKeywordsPredicate predicate = preparePredicate(" ");
         FindRecipeCommand command = new FindRecipeCommand(predicate);
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
         expectedModel.updateFilteredRecipeList(predicate);
         CommandResult expected = new CommandResult(VALID_FIND_COMMAND_ZERO_MESSAGE);
         assertTrue(command.execute(model).equals(expected));
@@ -107,8 +114,12 @@ public class FindRecipeCommandTest {
     public void execute_multipleKeywords_multipleRecipesFound() {
         NameContainsKeywordsPredicate predicate = preparePredicate("Burger Maggie Fries Churros Toast Waffles");
         FindRecipeCommand command = new FindRecipeCommand(predicate);
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         CommandResult expected = new CommandResult(VALID_FIND_COMMAND_THREE_PLURAL_MESSAGE);
         expectedModel.updateFilteredRecipeList(predicate);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
         command.execute(model);
         assertTrue(command.execute(model).equals(expected));
         assertEquals(Arrays.asList(BURGER, MAGGIE, FRIES),
@@ -119,8 +130,13 @@ public class FindRecipeCommandTest {
     public void execute_multipleKeywords_oneRecipesFound() {
         NameContainsKeywordsPredicate predicate = preparePredicate("Burger Steak Pizza Churros Toast Waffles");
         FindRecipeCommand command = new FindRecipeCommand(predicate);
+        model.getActiveTabObservable().setObserver(new ObserverStub());
+
         CommandResult expected = new CommandResult(VALID_FIND_COMMAND_ONE_SINGULAR_MESSAGE);
         expectedModel.updateFilteredRecipeList(predicate);
+        expectedModel.getActiveTabObservable().setObserver(new ObserverStub());
+        expectedModel.setActiveTab(TabEnum.RECIPE);
+
         assertTrue(command.execute(model).equals(expected));
         assertEquals(Arrays.asList(BURGER),
                 model.getFilteredRecipeList());
@@ -131,5 +147,21 @@ public class FindRecipeCommandTest {
      */
     private NameContainsKeywordsPredicate preparePredicate(String userInput) {
         return new NameContainsKeywordsPredicate(Arrays.asList(userInput.split("\\s+")));
+    }
+
+    private class ObserverStub implements Observer {
+        @Override
+        public void update(Ingredient ingredient) {
+            return;
+        }
+
+        @Override
+        public void update(Recipe recipe) {
+            return;
+        }
+
+        public void update(TabEnum tabEnum) {
+            return;
+        }
     }
 }
