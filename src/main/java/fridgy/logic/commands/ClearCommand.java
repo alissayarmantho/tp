@@ -8,6 +8,7 @@ import java.util.List;
 import fridgy.model.IngredientModel;
 import fridgy.model.Inventory;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.ui.TabEnum;
 
 /**
  * Clears the Inventory or clear all expired ingredients.
@@ -46,6 +47,7 @@ public class ClearCommand extends Command {
             }
         }
         toDelete.forEach(model::delete);
+        model.setActiveTab(TabEnum.INGREDIENT);
         return new CommandResult(MESSAGE_SUCCESS_EXPIRED);
     }
 

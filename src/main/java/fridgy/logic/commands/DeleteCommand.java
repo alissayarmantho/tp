@@ -9,6 +9,7 @@ import fridgy.commons.core.index.Index;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.IngredientModel;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.ui.TabEnum;
 
 /**
  * Deletes an ingredient identified using it's displayed index from the Inventory.
@@ -42,6 +43,7 @@ public class DeleteCommand extends Command {
 
         Ingredient ingredientToDelete = lastShownList.get(targetIndex.getZeroBased());
         model.delete(ingredientToDelete);
+        model.setActiveTab(TabEnum.INGREDIENT);
         return new CommandResult(String.format(MESSAGE_DELETE_INGREDIENT_SUCCESS, ingredientToDelete));
     }
 

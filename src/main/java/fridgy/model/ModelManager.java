@@ -16,6 +16,7 @@ import fridgy.model.ingredient.BaseIngredient;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.model.recipe.Recipe;
 import fridgy.ui.Observable;
+import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 
@@ -33,6 +34,7 @@ public class ModelManager implements Model {
     private final FilteredList<Ingredient> filteredIngredients;
     private final FilteredList<Recipe> filteredRecipes;
     private final Observable activeObservable;
+    private final Observable activeTab;
 
     /**
      * Initializes a ModelManager with the given inventory and userPrefs.
@@ -57,6 +59,7 @@ public class ModelManager implements Model {
 
         // observable that can change to make UI auto update
         activeObservable = new Observable();
+        activeTab = new Observable();
     }
 
     public ModelManager() {
@@ -208,6 +211,13 @@ public class ModelManager implements Model {
         }
     }
 
+    /** Changes the active {@code TabEnum} under the {@code Observable}. */
+    @Override
+    public void setActiveTab(TabEnum tabEnum) {
+        requireNonNull(tabEnum);
+        activeTab.change(tabEnum);
+    }
+
     @Override
     public boolean deductIngredients(Set<BaseIngredient> ingredients) {
         return inventory.deductIngredients(ingredients);
@@ -289,6 +299,11 @@ public class ModelManager implements Model {
     @Override
     public Observable getActiveObservable() {
         return activeObservable;
+    }
+
+    @Override
+    public Observable getActiveTabObservable() {
+        return activeTab;
     }
 
     //========== Private Method ============================================================

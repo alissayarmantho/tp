@@ -22,6 +22,7 @@ import fridgy.model.ingredient.IngredientDefaultComparator;
 import fridgy.model.ingredient.Name;
 import fridgy.model.ingredient.Quantity;
 import fridgy.model.tag.Tag;
+import fridgy.ui.TabEnum;
 
 /**
  * Edits the details of an existing ingredient in the Inventory.
@@ -81,6 +82,7 @@ public class EditCommand extends Command {
         model.set(ingredientToEdit, editedIngredient);
         model.updateFilteredIngredientList(IngredientModel.PREDICATE_SHOW_ALL_INGREDIENTS);
         model.sortIngredient(new IngredientDefaultComparator());
+        model.setActiveTab(TabEnum.INGREDIENT);
         return new CommandResult(String.format(MESSAGE_EDIT_INGREDIENT_SUCCESS, editedIngredient));
     }
 

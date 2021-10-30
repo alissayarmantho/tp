@@ -7,7 +7,9 @@ import java.util.function.Predicate;
 import fridgy.commons.core.GuiSettings;
 import fridgy.model.base.ReadOnlyDatabase;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Tab;
 
 public interface IngredientModel {
     /** {@code Predicate} that always evaluate to true */
@@ -92,7 +94,15 @@ public interface IngredientModel {
 
     /**
      * Puts a new Ingredient under an {@code Observable}.
+     *
      * @param activeIngredient to be placed under an Observable
      */
     void setActiveIngredient(Ingredient activeIngredient);
+
+    /**
+     * Makes Ingredient tab under an {@code Observable}.
+     *
+     * @param tabEnum to be placed under an Observable
+     */
+    void setActiveTab(TabEnum tabEnum);
 }

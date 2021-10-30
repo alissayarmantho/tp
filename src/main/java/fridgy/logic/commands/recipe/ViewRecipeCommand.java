@@ -10,6 +10,7 @@ import fridgy.logic.commands.CommandResult;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.RecipeModel;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 
 /**
  * Views a specific Recipe in the RecipeBook in greater detail.
@@ -50,6 +51,7 @@ public class ViewRecipeCommand extends RecipeCommand {
 
         Recipe targetRecipe = recipeList.get(target.getZeroBased());
         model.setActiveRecipe(targetRecipe);
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(String.format(MESSAGE_SUCCESS, targetRecipe));
     }
 

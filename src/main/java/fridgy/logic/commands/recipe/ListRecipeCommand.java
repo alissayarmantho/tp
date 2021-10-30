@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import fridgy.logic.commands.CommandResult;
 import fridgy.model.Model;
 import fridgy.model.RecipeModel;
+import fridgy.ui.TabEnum;
 
 /**
  * Lists all recipes in the recipe book to the user.
@@ -24,6 +25,7 @@ public class ListRecipeCommand extends RecipeCommand {
     public CommandResult execute(RecipeModel model) {
         requireNonNull(model);
         model.updateFilteredRecipeList(Model.PREDICATE_SHOW_ALL_RECIPES);
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 

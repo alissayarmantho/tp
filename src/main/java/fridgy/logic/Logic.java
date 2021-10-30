@@ -43,6 +43,9 @@ public interface Logic {
     /** Returns an active recipe */
     Observable getActiveObservable();
 
+    /** Returns an active tab */
+    Observable getActiveTabObservable();
+
     /**
      * Returns the user prefs' Inventory file path.
      */

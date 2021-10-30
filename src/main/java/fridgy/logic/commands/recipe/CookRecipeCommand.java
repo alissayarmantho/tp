@@ -12,6 +12,7 @@ import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.RecipeModel;
 import fridgy.model.ingredient.BaseIngredient;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 
 
 /**
@@ -57,6 +58,7 @@ public class CookRecipeCommand extends RecipeCommand {
         if (!deducted) {
             throw new CommandException(String.format(NOT_ENOUGH_INGR, recipeToCook));
         }
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(String.format(MESSAGE_SUCCESS, recipeToCook));
     }
 

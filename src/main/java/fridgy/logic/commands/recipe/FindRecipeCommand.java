@@ -6,6 +6,7 @@ import fridgy.commons.core.Messages;
 import fridgy.logic.commands.CommandResult;
 import fridgy.model.RecipeModel;
 import fridgy.model.recipe.NameContainsKeywordsPredicate;
+import fridgy.ui.TabEnum;
 
 /**
  * Finds a Recipe by name in the RecipeBook.
@@ -34,6 +35,7 @@ public class FindRecipeCommand extends RecipeCommand {
     public CommandResult execute(RecipeModel model) {
         requireNonNull(model);
         model.updateFilteredRecipeList(predicate);
+        model.setActiveTab(TabEnum.RECIPE);
 
         int size = model.getFilteredRecipeList().size();
         String plural = size == 0 || size == 1 ? "" : "s";

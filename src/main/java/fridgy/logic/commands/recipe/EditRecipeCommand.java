@@ -20,6 +20,7 @@ import fridgy.model.ingredient.BaseIngredient;
 import fridgy.model.recipe.Name;
 import fridgy.model.recipe.Recipe;
 import fridgy.model.recipe.Step;
+import fridgy.ui.TabEnum;
 
 /**
  * Edits a Recipe in the RecipeBook.
@@ -83,6 +84,7 @@ public class EditRecipeCommand extends RecipeCommand {
 
         model.set(recipeToEdit, editedRecipe);
         model.updateFilteredRecipeList(RecipeModel.PREDICATE_SHOW_ALL_RECIPES);
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(String.format(MESSAGE_EDIT_RECIPE_SUCCESS, editedRecipe));
     }
 

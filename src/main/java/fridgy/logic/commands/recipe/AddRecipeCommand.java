@@ -10,6 +10,7 @@ import fridgy.logic.commands.CommandResult;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.RecipeModel;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 
 /**
  * Adds a Recipe to the RecipeBook.
@@ -57,6 +58,7 @@ public class AddRecipeCommand extends RecipeCommand {
         }
 
         model.add(toAdd);
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }
 

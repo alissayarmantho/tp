@@ -9,6 +9,7 @@ import fridgy.model.base.ReadOnlyDatabase;
 import fridgy.model.ingredient.BaseIngredient;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
 
 
@@ -70,9 +71,16 @@ public interface RecipeModel {
     ObservableList<Ingredient> getFilteredIngredientList();
 
     /** Sets a new recipe as active under an {@code Observable}.
+     *
      * @param activeRecipe to be placed under an Observable
      */
     void setActiveRecipe(Recipe activeRecipe);
+
+    /** Makes Recipe tab under an {@code Observable}.
+     *
+     * @param tabEnum to be placed under an Observable
+     */
+    void setActiveTab(TabEnum tabEnum);
 
     /**
      * Updates the filter of the filtered recipe list to filter by the given {@code predicate}.

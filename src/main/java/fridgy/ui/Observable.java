@@ -36,4 +36,14 @@ public class Observable {
         requireNonNull(newItem);
         observer.update(newItem);
     }
+
+    /**
+     * Change the item being observed by the observer.
+     *
+     * @param newItem new tab to be observed by the observer
+     */
+    public void change (TabEnum newItem) {
+        requireNonNull(newItem);
+        observer.update(newItem);
+    }
 }

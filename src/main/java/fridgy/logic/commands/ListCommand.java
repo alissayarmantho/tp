@@ -5,6 +5,7 @@ import static java.util.Objects.requireNonNull;
 import fridgy.model.IngredientModel;
 import fridgy.model.Model;
 import fridgy.model.ingredient.IngredientDefaultComparator;
+import fridgy.ui.TabEnum;
 
 
 /**
@@ -25,6 +26,7 @@ public class ListCommand extends Command {
     public CommandResult execute(IngredientModel model) {
         requireNonNull(model);
         model.sortIngredient(new IngredientDefaultComparator());
+        model.setActiveTab(TabEnum.INGREDIENT);
         model.updateFilteredIngredientList(Model.PREDICATE_SHOW_ALL_INGREDIENTS);
         return new CommandResult(MESSAGE_SUCCESS);
     }

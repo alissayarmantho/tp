@@ -6,6 +6,7 @@ import fridgy.logic.commands.CommandResult;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.RecipeBook;
 import fridgy.model.RecipeModel;
+import fridgy.ui.TabEnum;
 
 /**
  * Clears the RecipeBook.
@@ -29,6 +30,7 @@ public class ClearRecipeCommand extends RecipeCommand {
     public CommandResult execute(RecipeModel model) throws CommandException {
         requireNonNull(model);
         model.setRecipeBook(new RecipeBook());
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(MESSAGE_SUCCESS);
     }
 

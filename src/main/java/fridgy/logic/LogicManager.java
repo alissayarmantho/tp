@@ -78,6 +78,11 @@ public class LogicManager implements Logic {
     }
 
     @Override
+    public Observable getActiveTabObservable() {
+        return model.getActiveTabObservable();
+    }
+
+    @Override
     public Path getInventoryFilePath() {
         return model.getInventoryFilePath();
     }

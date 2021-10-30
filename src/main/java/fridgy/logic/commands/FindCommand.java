@@ -6,6 +6,7 @@ import fridgy.commons.core.Messages;
 import fridgy.model.IngredientModel;
 import fridgy.model.ingredient.IngredientDefaultComparator;
 import fridgy.model.ingredient.NameContainsKeywordsPredicate;
+import fridgy.ui.TabEnum;
 
 /**
  * Finds and lists all ingredients in Inventory whose name contains any of the argument keywords.
@@ -33,6 +34,7 @@ public class FindCommand extends Command {
         requireNonNull(model);
         model.updateFilteredIngredientList(predicate);
         model.sortIngredient(new IngredientDefaultComparator());
+        model.setActiveTab(TabEnum.INGREDIENT);
 
         int size = model.getFilteredIngredientList().size();
         String plural = size == 0 || size == 1 ? "" : "s";

@@ -10,6 +10,7 @@ import fridgy.logic.commands.CommandResult;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.RecipeModel;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 
 /**
  * Deletes a Recipe from the RecipeBook.
@@ -50,6 +51,7 @@ public class DeleteRecipeCommand extends RecipeCommand {
 
         Recipe targetRecipe = recipeList.get(target.getZeroBased());
         model.delete(targetRecipe);
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(String.format(MESSAGE_SUCCESS, targetRecipe));
     }
 

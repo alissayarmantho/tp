@@ -42,9 +42,9 @@
                     <HBox AnchorPane.bottomAnchor="25.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0"
                           AnchorPane.topAnchor="30.0">
                         <children>
-                            <TabPane minWidth="400.0" prefWidth="500.0" tabClosingPolicy="UNAVAILABLE">
+                            <TabPane fx:id="tabPane" minWidth="400.0" prefWidth="500.0" tabClosingPolicy="UNAVAILABLE">
                                 <tabs>
-                                    <Tab text="Ingredient">
+                                    <Tab fx:id="ingredientTab" text="Ingredient">
                                         <content>
                                             <VBox fx:id="ingredientList" minWidth="400" prefWidth="400" VBox.vgrow="ALWAYS"
                                                   styleClass="main-window">
@@ -56,7 +56,7 @@
                                             </VBox>
                                         </content>
                                     </Tab>
-                                    <Tab text="Recipe">
+                                    <Tab fx:id="recipeTab" text="Recipe">
                                         <content>
                                             <VBox fx:id="recipeList" minWidth="400" prefWidth="400" VBox.vgrow="ALWAYS">
                                                 <padding>

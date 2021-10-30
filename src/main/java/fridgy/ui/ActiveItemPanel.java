@@ -44,4 +44,14 @@ public class ActiveItemPanel extends UiPart<Region> implements Observer {
         RecipeDisplay recipeDisplay = new RecipeDisplay(newItem, isEnough);
         activeBox.getChildren().add(recipeDisplay.getRoot());
     }
+
+    /**
+     * This should not be called
+     *
+     * @param newItem
+     */
+    @Override
+    public void update(TabEnum newItem) {
+        return;
+    }
 }

@@ -12,6 +12,7 @@ import fridgy.model.IngredientModel;
 import fridgy.model.ingredient.ExpiryStatusUpdater;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.model.ingredient.IngredientDefaultComparator;
+import fridgy.ui.TabEnum;
 
 
 /**
@@ -63,6 +64,7 @@ public class AddCommand extends Command {
 
         model.add(toAdd);
         model.sortIngredient(new IngredientDefaultComparator());
+        model.setActiveTab(TabEnum.INGREDIENT);
         return new CommandResult(String.format(MESSAGE_SUCCESS, toAdd));
     }
 

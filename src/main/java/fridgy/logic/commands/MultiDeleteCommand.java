@@ -13,6 +13,7 @@ import fridgy.commons.core.index.Index;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.IngredientModel;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.ui.TabEnum;
 
 /**
  * Deletes ingredients identified using their displayed indices from the Inventory.
@@ -63,6 +64,7 @@ public class MultiDeleteCommand extends Command {
         }
         // delete all chosen ingredients
         toDelete.forEach(model::delete);
+        model.setActiveTab(TabEnum.INGREDIENT);
         return new CommandResult(String.format(MESSAGE_MULTIDELETE_INGREDIENT_SUCCESS, targetIndices.size()));
     }
 

@@ -14,6 +14,7 @@ import fridgy.logic.commands.CommandResult;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.RecipeModel;
 import fridgy.model.recipe.Recipe;
+import fridgy.ui.TabEnum;
 
 /**
  * Deletes recipes identified using their displayed indices from the RecipeBook.
@@ -36,7 +37,6 @@ public class MultiDeleteRecipeCommand extends RecipeCommand {
      * Instantiates a new MultiDeleteRecipe command for recipes. Accepts one to infinite indices to be deleted from
      * the RecipeBook.
      *
-     * @param targetIndex   index of the minimal recipe to be deleted
      * @param targetIndices indices of any number of additional recipes to be deleted
      */
     public MultiDeleteRecipeCommand(Index... targetIndices) {
@@ -64,6 +64,7 @@ public class MultiDeleteRecipeCommand extends RecipeCommand {
         }
         // delete all chosen recipes
         toDelete.forEach(model::delete);
+        model.setActiveTab(TabEnum.RECIPE);
         return new CommandResult(String.format(MESSAGE_MULTIDELETE_RECIPE_SUCCESS, targetIndices.size()));
     }
 

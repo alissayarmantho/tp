@@ -9,6 +9,7 @@ import fridgy.commons.core.index.Index;
 import fridgy.logic.commands.exceptions.CommandException;
 import fridgy.model.IngredientModel;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.ui.TabEnum;
 
 public class ViewCommand extends Command {
 
@@ -45,6 +46,7 @@ public class ViewCommand extends Command {
 
         Ingredient targetIngredient = ingredientList.get(target.getZeroBased());
         model.setActiveIngredient(targetIngredient);
+        model.setActiveTab(TabEnum.INGREDIENT);
         return new CommandResult(String.format(MESSAGE_SUCCESS, targetIngredient));
     }
 
