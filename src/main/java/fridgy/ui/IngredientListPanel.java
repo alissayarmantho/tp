@@ -4,6 +4,7 @@ import java.util.logging.Logger;
 
 import fridgy.commons.core.LogsCenter;
 import fridgy.model.ingredient.Ingredient;
+import fridgy.model.recipe.Recipe;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
@@ -15,7 +16,7 @@ import javafx.scene.layout.Region;
 /**
  * Panel containing the list of ingredients.
  */
-public class IngredientListPanel extends UiPart<Region> {
+public class IngredientListPanel extends UiPart<Region> implements Observer {
     private static final String FXML = "IngredientListPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(IngredientListPanel.class);
 
@@ -25,8 +26,9 @@ public class IngredientListPanel extends UiPart<Region> {
     /**
      * Creates a {@code IngredientListPanel} with the given {@code ObservableList}.
      */
-    public IngredientListPanel(ObservableList<Ingredient> ingredientList, ActiveItemPanel activeItemPanel) {
+    public IngredientListPanel(Observable activeObservable, ObservableList<Ingredient> ingredientList, ActiveItemPanel activeItemPanel) {
         super(FXML);
+        activeObservable.setObserver(this);
         ingredientListView.setItems(ingredientList);
         ingredientListView.setCellFactory(listView -> new IngredientListViewCell());
         ingredientListView.getSelectionModel().selectedItemProperty().addListener(
@@ -36,6 +38,19 @@ public class IngredientListPanel extends UiPart<Region> {
                         activeItemPanel.update(new_val);
                     }
                 });
+    }
+
+    @Override
+    public void update(Ingredient newItem) {
+        ingredientListView.getSelectionModel().select(newItem);
+    }
+
+    @Override
+    /**
+     * This should not be called
+     */
+    public void update(Recipe newItem) {
+        return;
     }
 
     /**

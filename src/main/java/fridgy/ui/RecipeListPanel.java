@@ -5,6 +5,7 @@ import java.util.logging.Logger;
 
 import fridgy.commons.core.LogsCenter;
 import fridgy.model.ingredient.BaseIngredient;
+import fridgy.model.ingredient.Ingredient;
 import fridgy.model.recipe.Recipe;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -17,7 +18,7 @@ import javafx.scene.layout.Region;
 /**
  * Panel containing the list of recipes.
  */
-public class RecipeListPanel extends UiPart<Region> {
+public class RecipeListPanel extends UiPart<Region> implements Observer {
     private static final String FXML = "RecipeListPanel.fxml";
     private final Logger logger = LogsCenter.getLogger(RecipeListPanel.class);
 
@@ -30,9 +31,10 @@ public class RecipeListPanel extends UiPart<Region> {
      * Creates a {@code RecipeListPanel} with the given {@code ObservableList}.
      * isDetailed flag determines if the recipe card will show the steps. This is added to allow component reuse.
      */
-    public RecipeListPanel(ObservableList<Recipe> recipeList, ActiveItemPanel activeItemPanel,
+    public RecipeListPanel(Observable activeObservable, ObservableList<Recipe> recipeList, ActiveItemPanel activeItemPanel,
                            Function<BaseIngredient, Boolean> isEnough) {
         super(FXML);
+        activeObservable.setObserver(this);
         this.isEnough = isEnough;
         recipeListView.setItems(recipeList);
         recipeListView.setCellFactory(listView -> new RecipeListViewCell());
@@ -43,6 +45,19 @@ public class RecipeListPanel extends UiPart<Region> {
                         activeItemPanel.update(new_val);
                     }
                 });
+    }
+
+    @Override
+    /**
+     * This should not be called
+     */
+    public void update(Ingredient newItem) {
+        return;
+    }
+
+    @Override
+    public void update(Recipe newItem) {
+        recipeListView.getSelectionModel().select(newItem);
     }
 
     /**
