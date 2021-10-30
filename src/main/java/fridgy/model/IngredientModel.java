@@ -9,7 +9,6 @@ import fridgy.model.base.ReadOnlyDatabase;
 import fridgy.model.ingredient.Ingredient;
 import fridgy.ui.TabEnum;
 import javafx.collections.ObservableList;
-import javafx.scene.control.Tab;
 
 public interface IngredientModel {
     /** {@code Predicate} that always evaluate to true */
