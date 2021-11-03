@@ -51,7 +51,17 @@ public class TabListPanel extends UiPart<Region> {
      * Handles a {@code TabSwitchEvent}, switch the tab to the target tab.
      */
     public void handleTabChange(TabSwitchEvent event) {
-        tabPane.getSelectionModel().select(event.getItem().ordinal());
+        TabEnum target = event.getItem();
+        switch (target) {
+        case RECIPE: case INGREDIENT:
+            tabPane.getSelectionModel().select(event.getItem().ordinal());
+            break;
+        case NEXT: default:
+            int currentIndex = tabPane.getSelectionModel().getSelectedIndex();
+            int nextIndex = currentIndex == 0 ? 1 : 0;
+            tabPane.getSelectionModel().select(nextIndex);
+            break;
+        }
     }
 
     /**

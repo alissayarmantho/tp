@@ -17,6 +17,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextInputControl;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.StackPane;
@@ -78,6 +80,11 @@ public class MainWindow extends UiPart<Stage> implements Observer {
         setAccelerators();
 
         helpWindow = new HelpWindow();
+
+        // Set accelerators for the primary stage
+        KeyCombination tabSwitchKey = new KeyCodeCombination(KeyCode.T, KeyCombination.CONTROL_DOWN);
+        Runnable nextTab = () -> this.update(TabEnum.NEXT);
+        primaryStage.getScene().getAccelerators().put(tabSwitchKey, nextTab);
     }
 
     public Stage getPrimaryStage() {
